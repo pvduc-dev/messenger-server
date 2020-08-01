@@ -12,8 +12,6 @@ async function bootstrap() {
     },
   );
 
-  app.setGlobalPrefix('v1')
-
   const configService: ConfigService = app.get<ConfigService>(ConfigService);
 
   const swaggerDocumentOption = new DocumentBuilder()
@@ -26,7 +24,7 @@ async function bootstrap() {
     app,
     swaggerDocumentOption,
   );
-  SwaggerModule.setup('v1/docs', app, documentSwagger);
+  SwaggerModule.setup('docs', app, documentSwagger);
 
   await app.listen(configService.get<number>('PORT'));
 }

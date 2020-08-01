@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './schemas/user.schema';
-import { genSalt, hash } from 'bcrypt';
+import { genSalt, hash, compare } from 'bcrypt';
 import { IUser } from './interfaces/user.interface';
-import { ConfigService } from '@nestjs/config';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -12,20 +11,22 @@ import { UsersService } from './users.service';
     MongooseModule.forFeatureAsync([
       {
         name: 'User',
-        useFactory: (configService: ConfigService) => {
+        useFactory: () => {
           UserSchema.pre<IUser>('save', async function(next) {
             if (this.isModified('password')) {
               try {
-                const salt = await genSalt(+configService.get<number>('HASH_SALT'));
+                const salt = await genSalt(8);
                 this.password = await hash(this.password, salt);
               } catch (e) {
                 next(e);
               }
             }
           })
+          UserSchema.method('isValidPassword', async function(plainText: string) {
+            return await compare(plainText, this.password)
+          })
           return UserSchema;
         },
-        inject: [ConfigService]
       }
     ])
   ],

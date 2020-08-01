@@ -6,15 +6,16 @@ export class User extends Document {
   @Prop({ required: true, unique: true, trim: true, lowercase: true })
   public email: string;
 
-  @Prop({
-    required: true,
-  })
+  @Prop({ required: true })
   public password: string;
 
-  @Prop()
+  @Prop({ required: true})
+  public roles: string[];
+
+  @Prop({ required: true })
   public firstName: string;
 
-  @Prop()
+  @Prop({ required: true })
   public lastName: string;
 
   @Prop()
