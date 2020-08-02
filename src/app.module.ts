@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { APP_PIPE } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -25,13 +26,14 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
     UsersModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({ whitelist: true }),
-    }
+    },
   ],
 })
 export class AppModule {}

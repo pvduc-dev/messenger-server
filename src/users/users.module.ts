@@ -12,7 +12,7 @@ import { UsersService } from './users.service';
       {
         name: 'User',
         useFactory: () => {
-          UserSchema.pre<IUser>('save', async function(next) {
+          UserSchema.pre<IUser>('save', async function (next) {
             if (this.isModified('password')) {
               try {
                 const salt = await genSalt(8);
@@ -21,14 +21,16 @@ import { UsersService } from './users.service';
                 next(e);
               }
             }
-          })
-          UserSchema.method('isValidPassword', async function(plainText: string) {
-            return await compare(plainText, this.password)
-          })
+          });
+          UserSchema.method('isValidPassword', async function (
+            plainText: string,
+          ) {
+            return await compare(plainText, this.password);
+          });
           return UserSchema;
         },
-      }
-    ])
+      },
+    ]),
   ],
   controllers: [UsersController],
   providers: [UsersService],

@@ -1,12 +1,11 @@
 import { Document } from 'mongoose';
-import { ERole } from './role.enum';
 
 export interface IUser extends Document {
   email: string;
 
   password: string;
 
-  roles: ERole[];
+  roles: string;
 
   firstName: string;
 
@@ -16,5 +15,5 @@ export interface IUser extends Document {
 
   active: boolean;
 
-  isValidPassword(plainText: string): Promise<boolean>
+  isValidPassword(plainText: string): Promise<boolean>;
 }

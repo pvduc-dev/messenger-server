@@ -9,8 +9,8 @@ export class User extends Document {
   @Prop({ required: true })
   public password: string;
 
-  @Prop({ required: true})
-  public roles: string[];
+  @Prop({ required: true })
+  public role: string;
 
   @Prop({ required: true })
   public firstName: string;
@@ -20,6 +20,9 @@ export class User extends Document {
 
   @Prop()
   public avatar: string;
+
+  @Prop({ default: true })
+  public isActive: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
