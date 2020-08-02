@@ -9,7 +9,7 @@ export class User extends Document {
   @Prop({ required: true })
   public password: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: 'personal' })
   public role: string;
 
   @Prop({ required: true })

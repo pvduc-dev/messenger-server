@@ -5,7 +5,7 @@ export interface IUser extends Document {
 
   password: string;
 
-  roles: string;
+  role: string;
 
   firstName: string;
 
@@ -16,4 +16,6 @@ export interface IUser extends Document {
   active: boolean;
 
   isValidPassword(plainText: string): Promise<boolean>;
+
+  paginate(): Promise<[]>;
 }

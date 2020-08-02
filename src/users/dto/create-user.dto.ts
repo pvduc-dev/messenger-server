@@ -1,7 +1,7 @@
 import {
-  IsBoolean,
+  IsBoolean, IsDateString,
   IsEmail,
-  IsNotEmpty,
+  IsNotEmpty, IsOptional,
   IsString,
   Length,
 } from 'class-validator';
@@ -15,7 +15,7 @@ export class CreateUserDto {
   public password: string;
 
   @IsString()
-  public role?: string;
+  public role?: string = 'Personal';
 
   @IsString()
   @IsNotEmpty()
@@ -26,5 +26,9 @@ export class CreateUserDto {
   public lastName: string;
 
   @IsBoolean()
-  public isActive?: boolean;
+  public isActive?: boolean = true;
+
+  @IsDateString()
+  @IsOptional()
+  public createdAt?: string;
 }

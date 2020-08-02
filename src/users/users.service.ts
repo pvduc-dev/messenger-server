@@ -1,21 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { IUser } from './interfaces/user.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { SignUpDto } from '../auth/dto/sign-up.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { IModel } from '../core/interfaces/model.interface';
+import { QueryUserDto } from './dto/query-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<IUser>) {}
+  constructor(@InjectModel('User') private readonly userModel: IModel<IUser>) {}
 
   /**
    * Get a list of users
    * @author Pv Duc
    */
-  public async find(): Promise<IUser[]> {
-    return this.userModel.find().select('-password').exec();
+  public async paginate(queryUserDto: QueryUserDto): Promise<any> {
+    const { page, perPage, fields, ...filter } = queryUserDto;
+    return this.userModel.paginate(filter, {
+      page: page,
+      limit: perPage,
+      select: '-password',
+    });
   }
 
   /**

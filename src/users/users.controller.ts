@@ -5,15 +5,16 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put,
+  Put, Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { IUser } from './interfaces/user.interface';
 import { IResponse } from '../core/interfaces/response.interface';
-import { IPage } from '../core/interfaces/page.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { QueryUserDto } from './dto/query-user.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -22,20 +23,18 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  public async find(): Promise<IResponse<IPage<IUser>>> {
-    const users = await this.usersService.find();
+  @Auth(['moderator', 'administrator'])
+  public async paginate(@Query() queryUserDto: QueryUserDto): Promise<IResponse<any>> {
+    const pagination = await this.usersService.paginate(queryUserDto);
     return {
       statusCode: HttpStatus.OK,
       message: 'Get user list successfully',
-      data: {
-        page: 1,
-        size: 24,
-        records: users,
-      },
+      data: pagination,
     };
   }
 
   @Get(':userId')
+  @Auth(['moderator', 'administrator'])
   public async findById(
     @Param('userId') userId: string,
   ): Promise<IResponse<IUser>> {
@@ -48,6 +47,7 @@ export class UsersController {
   }
 
   @Post()
+  @Auth(['administrator'])
   public async create(
     @Body() createUserDto: CreateUserDto,
   ): Promise<IResponse<any>> {
@@ -59,6 +59,7 @@ export class UsersController {
   }
 
   @Put(':userId')
+  @Auth(['administrator'])
   public async update(
     @Param('userId') userId: string,
     @Body() updateUserDto: UpdateUserDto,

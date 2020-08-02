@@ -23,7 +23,7 @@ export class AuthController {
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   public async signIn(@Body() signInDto: SignInDto): Promise<IResponse<any>> {
-    const user = await this.authService.validate(signInDto);
+    const user: IUser = await this.authService.validate(signInDto);
     if (!!user) {
       return {
         statusCode: HttpStatus.OK,
@@ -32,7 +32,7 @@ export class AuthController {
           accessToken: this.authService.generateToken({
             sub: user.id,
           }),
-          roles: user.roles,
+          role: user.role,
         },
       };
     }
