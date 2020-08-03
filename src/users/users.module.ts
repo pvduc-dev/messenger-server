@@ -27,7 +27,7 @@ import { UsersService } from './users.service';
           ) {
             return await compare(plainText, this.password);
           });
-          UserSchema.plugin(require('mongoose-paginate-v2'))
+          UserSchema.plugin(require('mongoose-paginate-v2'));
           return UserSchema;
         },
       },

@@ -5,7 +5,8 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put, Query,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -24,7 +25,9 @@ export class UsersController {
 
   @Get()
   @Auth(['moderator', 'administrator'])
-  public async paginate(@Query() queryUserDto: QueryUserDto): Promise<IResponse<any>> {
+  public async paginate(
+    @Query() queryUserDto: QueryUserDto,
+  ): Promise<IResponse<any>> {
     const pagination = await this.usersService.paginate(queryUserDto);
     return {
       statusCode: HttpStatus.OK,

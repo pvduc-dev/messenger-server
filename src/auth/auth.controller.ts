@@ -2,11 +2,14 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { IResponse } from '../core/interfaces/response.interface';
@@ -14,6 +17,8 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { IUser } from '../users/interfaces/user.interface';
 import { User } from '../core/user.decorator';
 import { SignUpDto } from './dto/sign-up.dto';
+import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -22,21 +27,38 @@ export class AuthController {
 
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
-  public async signIn(@Body() signInDto: SignInDto): Promise<IResponse<any>> {
+  public async signIn(
+    @Body() signInDto: SignInDto,
+    @Res() response: Response,
+  ): Promise<any> {
     const user: IUser = await this.authService.validate(signInDto);
     if (!!user) {
-      return {
+      const accessToken = this.authService.generateToken({
+        sub: user.id,
+      });
+      response.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        path: '/',
+      });
+      return response.status(200).json({
         statusCode: HttpStatus.OK,
         message: 'Sign in successfully',
         data: {
-          accessToken: this.authService.generateToken({
-            sub: user.id,
-          }),
+          accessToken: accessToken,
+          email: user.email,
           role: user.role,
         },
-      };
+      });
     }
     throw new BadRequestException('Invalid credentials');
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  @ApiOAuth2(['profile', 'email', 'openid'], 'google')
+  public google(@User() user: IUser, @Res() response: Response): any {
+    response.cookie('accessToken', 1234, { httpOnly: true, path: '/' });
+    response.redirect('/', 302);
   }
 
   @Post('sign-up')

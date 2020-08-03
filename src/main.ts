@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create<NestApplication>(
@@ -12,12 +13,15 @@ async function bootstrap() {
     },
   );
 
+  app.use(cookieParser());
+
   const configService: ConfigService = app.get<ConfigService>(ConfigService);
 
   const swaggerDocumentOption = new DocumentBuilder()
     .setTitle('Chat server')
     .setVersion('1.0.0')
     .addBearerAuth()
+    .addCookieAuth()
     .addOAuth2()
     .build();
   const documentSwagger = SwaggerModule.createDocument(

@@ -5,9 +5,14 @@ import { UsersModule } from './users/users.module';
 import { APP_PIPE } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { ProfileModule } from './profile/profile.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
