@@ -19,11 +19,15 @@ import { User } from '../core/user.decorator';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -39,6 +43,7 @@ export class AuthController {
       response.cookie('accessToken', accessToken, {
         httpOnly: true,
         path: '/',
+        maxAge: this.configService.get('JWT_EXPIRES'),
       });
       return response.status(200).json({
         statusCode: HttpStatus.OK,
@@ -60,7 +65,11 @@ export class AuthController {
     const accessToken = this.authService.generateToken({
       sub: user.id,
     });
-    response.cookie('accessToken', accessToken, { httpOnly: true, path: '/' });
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      path: '/',
+      maxAge: this.configService.get('JWT_EXPIRES'),
+    });
     response.redirect('/', HttpStatus.FOUND);
   }
 
