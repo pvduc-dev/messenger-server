@@ -1,20 +1,19 @@
 import {
+  IsArray,
   IsBoolean,
   IsDateString,
   IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   Length,
 } from 'class-validator';
+import { IAccount } from '../interfaces/account.interface';
 
 export class CreateUserDto {
   @IsEmail()
-  public email: string;
-
-  @IsString()
-  @Length(8, 24)
-  public password: string;
+  public email?: string;
 
   @IsString()
   public role?: string = 'Personal';
@@ -23,14 +22,16 @@ export class CreateUserDto {
   @IsNotEmpty()
   public firstName: string;
 
+  @IsArray()
+  public accounts: IAccount[];
+
   @IsString()
   @IsNotEmpty()
   public lastName: string;
 
   @IsBoolean()
-  public isActive?: boolean = true;
+  public active?: boolean = true;
 
-  @IsDateString()
-  @IsOptional()
-  public createdAt?: string;
+  @IsUrl()
+  public avatar?: string;
 }

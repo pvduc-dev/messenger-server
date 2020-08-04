@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { SignInDto } from './dto/sign-in.dto';
+import { LoginDto } from './dto/login.dto';
 import { IResponse } from '../core/interfaces/response.interface';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { IUser } from '../users/interfaces/user.interface';
@@ -25,13 +25,13 @@ import { AuthGuard } from '@nestjs/passport';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('sign-in')
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   public async signIn(
-    @Body() signInDto: SignInDto,
+    @Body() loginDto: LoginDto,
     @Res() response: Response,
   ): Promise<any> {
-    const user: IUser = await this.authService.validate(signInDto);
+    const user: IUser = await this.authService.validate(loginDto);
     if (!!user) {
       const accessToken = this.authService.generateToken({
         sub: user.id,
@@ -55,9 +55,11 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  @ApiOAuth2(['profile', 'email', 'openid'], 'google')
   public google(@User() user: IUser, @Res() response: Response): any {
-    response.cookie('accessToken', 1234, { httpOnly: true, path: '/' });
+    const accessToken = this.authService.generateToken({
+      sub: user.id
+    })
+    response.cookie('accessToken', accessToken, { httpOnly: true, path: '/' });
     response.redirect('/', 302);
   }
 

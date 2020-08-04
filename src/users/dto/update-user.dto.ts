@@ -7,5 +7,5 @@ export class UpdateUserDto {
 
   @IsBoolean()
   @IsOptional()
-  public isActive: boolean;
+  public active: boolean;
 }

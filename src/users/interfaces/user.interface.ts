@@ -1,11 +1,12 @@
 import { Document } from 'mongoose';
+import { IAccount } from './account.interface';
 
 export interface IUser extends Document {
   email: string;
 
-  password: string;
-
   role: string;
+
+  accounts: IAccount[];
 
   firstName: string;
 

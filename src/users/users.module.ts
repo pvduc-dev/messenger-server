@@ -13,10 +13,18 @@ import { UsersService } from './users.service';
         name: 'User',
         useFactory: () => {
           UserSchema.pre<IUser>('save', async function (next) {
-            if (this.isModified('password')) {
+            if (this.isModified('accounts.password')) {
               try {
                 const salt = await genSalt(8);
-                this.password = await hash(this.password, salt);
+                const index = this.accounts.findIndex(
+                  (account) => account.kind === 'internal',
+                );
+                if (index !== -1) {
+                  this.accounts[index].password = await hash(
+                    this.accounts[index].password,
+                    salt,
+                  );
+                }
               } catch (e) {
                 next(e);
               }
@@ -25,7 +33,10 @@ import { UsersService } from './users.service';
           UserSchema.method('isValidPassword', async function (
             plainText: string,
           ) {
-            return await compare(plainText, this.password);
+            const index = this.accounts.findIndex(
+              (account) => account.kind === 'internal',
+            );
+            return await compare(plainText, this.this.accounts[index].password);
           });
           UserSchema.plugin(require('mongoose-paginate-v2'));
           return UserSchema;

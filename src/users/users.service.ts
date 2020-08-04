@@ -15,11 +15,11 @@ export class UsersService {
    * @author Pv Duc
    */
   public async paginate(queryUserDto: QueryUserDto): Promise<any> {
-    const { page, perPage, fields, ...filter } = queryUserDto;
+    const { page, perPage, ...filter } = queryUserDto;
     return this.userModel.paginate(filter, {
       page: page,
       limit: perPage,
-      select: '-password',
+      select: '-accounts',
     });
   }
 
@@ -29,21 +29,39 @@ export class UsersService {
    * @author Pv Duc
    */
   public async findById(userId: string): Promise<IUser> {
-    return this.userModel.findById(userId).select('-password').exec();
+    return this.userModel.findById(userId).select('-accounts').exec();
   }
 
   /**
    * Find one user by email
    * @param email - User email to find
+   * @author Pv Duc
    */
   public async findByEmail(email: string): Promise<IUser> {
     return this.userModel.findOne({ email }).exec();
   }
 
+  public async findByGoogleId(googleId: string): Promise<IUser> {
+    return this.userModel.findOne({
+      'accounts.kind': 'google',
+      'accounts.id': googleId,
+    });
+  }
+
+  /**
+   * Create new user
+   * @param createUserDto - Create user data transfer object
+   * @author Pv Duc
+   */
   public async create(createUserDto: CreateUserDto): Promise<void> {
     await this.userModel.create<CreateUserDto>(createUserDto);
   }
 
+  /**
+   * @param userId - The user id to update
+   * @param updateUserDto - Update user data transfer object
+   * @author Pv Duc
+   */
   public async update(
     userId: string,
     updateUserDto: UpdateUserDto,

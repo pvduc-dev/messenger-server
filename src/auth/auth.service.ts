@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { SignInDto } from './dto/sign-in.dto';
+import { LoginDto } from './dto/login.dto';
 import { IUser } from '../users/interfaces/user.interface';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -18,7 +18,7 @@ export class AuthService {
    * Validate credentials
    * @param signInDto - Sign in data transfer object
    */
-  public async validate(signInDto: SignInDto): Promise<IUser> {
+  public async validate(signInDto: LoginDto): Promise<IUser> {
     const user = await this.usersService.findByEmail(signInDto.email);
     if (await user?.isValidPassword(signInDto.password)) {
       return user;
@@ -32,7 +32,17 @@ export class AuthService {
    * @author Pv Duc
    */
   public async signUp(signUpDto: SignUpDto): Promise<void> {
-    return this.usersService.create(signUpDto);
+    return this.usersService.create({
+      email: signUpDto.email,
+      firstName: signUpDto.firstName,
+      lastName: signUpDto.lastName,
+      accounts: [
+        {
+          kind: 'internal',
+          password: signUpDto.password,
+        },
+      ],
+    });
   }
 
   /**

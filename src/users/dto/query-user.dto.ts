@@ -26,5 +26,5 @@ export class QueryUserDto {
 
   @IsBooleanString()
   @IsOptional()
-  public isActive?: string;
+  public active?: string;
 }
