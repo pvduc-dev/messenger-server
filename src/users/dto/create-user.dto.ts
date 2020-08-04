@@ -1,13 +1,10 @@
 import {
   IsArray,
   IsBoolean,
-  IsDateString,
   IsEmail,
   IsNotEmpty,
-  IsOptional,
   IsString,
   IsUrl,
-  Length,
 } from 'class-validator';
 import { IAccount } from '../interfaces/account.interface';
 

@@ -1,6 +1,4 @@
 import { Schema } from '@nestjs/mongoose';
 
 @Schema()
-export class AccountSchema {
-
-}
+export class AccountSchema {}

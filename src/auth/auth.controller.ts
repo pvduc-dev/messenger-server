@@ -54,13 +54,14 @@ export class AuthController {
   }
 
   @Get('google')
+  @ApiOAuth2([])
   @UseGuards(AuthGuard('google'))
   public google(@User() user: IUser, @Res() response: Response): any {
     const accessToken = this.authService.generateToken({
-      sub: user.id
-    })
+      sub: user.id,
+    });
     response.cookie('accessToken', accessToken, { httpOnly: true, path: '/' });
-    response.redirect('/', 302);
+    response.redirect('/', HttpStatus.FOUND);
   }
 
   @Post('sign-up')
@@ -71,6 +72,15 @@ export class AuthController {
       statusCode: HttpStatus.OK,
       message: 'Sign up successfully',
     };
+  }
+
+  @Get('signOut')
+  public signOut(@Res() response: Response): Response {
+    response.clearCookie('accessToken');
+    return response.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'Sign out successfully',
+    });
   }
 
   @Post('change-password')

@@ -1,5 +1,5 @@
 import { Controller, Get, HttpStatus } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { IResponse } from '../core/interfaces/response.interface';
 import { IUser } from '../users/interfaces/user.interface';
 import { User } from 'src/core/user.decorator';
