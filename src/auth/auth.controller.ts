@@ -70,7 +70,7 @@ export class AuthController {
       path: '/',
       maxAge: this.configService.get('JWT_EXPIRES'),
     });
-    response.redirect('/', HttpStatus.FOUND);
+    response.redirect(HttpStatus.FOUND, '/');
   }
 
   @Post('sign-up')
@@ -83,7 +83,7 @@ export class AuthController {
     };
   }
 
-  @Get('signOut')
+  @Get('sign-out')
   public signOut(@Res() response: Response): Response {
     response.clearCookie('accessToken');
     return response.status(HttpStatus.OK).json({

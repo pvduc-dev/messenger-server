@@ -1,5 +1,7 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { AccountSchema } from './account.schema';
+import { compare } from 'bcrypt';
 
 @Schema({ timestamps: true, versionKey: false })
 export class User extends Document {
@@ -9,17 +11,8 @@ export class User extends Document {
   @Prop({ required: true, default: 'personal' })
   public role: string;
 
-  @Prop(
-    raw([
-      {
-        kind: String,
-        id: String,
-        password: String,
-        accessToken: String,
-      },
-    ]),
-  )
-  public accounts: Record<string, string>[];
+  @Prop(raw([AccountSchema]))
+  public accounts: Account[];
 
   @Prop({ required: true })
   public firstName: string;
@@ -34,4 +27,13 @@ export class User extends Document {
   public active: boolean;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.method('isValidPassword', async function (plainText: string) {
+  const index = this.accounts.findIndex((account) => account === 'internal');
+  return compare(plainText, this.accounts[index]);
+});
+
+UserSchema.plugin(require('mongoose-paginate-v2'));
+
+export { UserSchema };

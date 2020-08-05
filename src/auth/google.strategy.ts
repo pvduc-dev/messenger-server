@@ -29,7 +29,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       if (!!user) {
         return done(null, user);
       }
-      await this.usersService.create({
+      const createdUser = await this.usersService.create({
         email: profile.emails[0].value,
         firstName: profile.name.givenName,
         lastName: profile.name.familyName,
@@ -37,12 +37,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
           {
             kind: 'google',
             id: profile.id,
-            accessToken,
+            accessToken: accessToken,
           },
         ],
         avatar: profile.photos[0].value,
       });
-      return done(null, user);
+      return done(null, createdUser);
     } catch (error) {
       return done(error);
     }

@@ -6,7 +6,6 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
-import { IAccount } from '../interfaces/account.interface';
 
 export class CreateUserDto {
   @IsEmail()
@@ -20,7 +19,7 @@ export class CreateUserDto {
   public firstName: string;
 
   @IsArray()
-  public accounts: IAccount[];
+  public accounts: Record<string, any>[];
 
   @IsString()
   @IsNotEmpty()

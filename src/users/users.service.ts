@@ -5,16 +5,21 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { IModel } from '../core/interfaces/model.interface';
 import { QueryUserDto } from './dto/query-user.dto';
+import { User } from './schemas/user.schema';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: IModel<IUser>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: IModel<IUser>,
+  ) {}
 
   /**
    * Get a list of users
    * @author Pv Duc
    */
-  public async paginate(queryUserDto: QueryUserDto): Promise<any> {
+  public async paginate(
+    queryUserDto: QueryUserDto,
+  ): Promise<Record<string, string>> {
     const { page, perPage, ...filter } = queryUserDto;
     return this.userModel.paginate(filter, {
       page: page,
@@ -29,7 +34,7 @@ export class UsersService {
    * @author Pv Duc
    */
   public async findById(userId: string): Promise<IUser> {
-    return this.userModel.findById(userId).select('-accounts').exec();
+    return this.userModel.findById(userId).select('-accounts');
   }
 
   /**
@@ -38,7 +43,7 @@ export class UsersService {
    * @author Pv Duc
    */
   public async findByEmail(email: string): Promise<IUser> {
-    return this.userModel.findOne({ email }).exec();
+    return this.userModel.findOne({ email });
   }
 
   public async findByGoogleId(googleId: string): Promise<IUser> {
@@ -54,7 +59,8 @@ export class UsersService {
    * @author Pv Duc
    */
   public async create(createUserDto: CreateUserDto): Promise<void> {
-    await this.userModel.create<CreateUserDto>(createUserDto);
+    const user = new this.userModel(createUserDto);
+    return user.save();
   }
 
   /**
@@ -68,7 +74,7 @@ export class UsersService {
   ): Promise<IUser> {
     return this.userModel.findByIdAndUpdate(userId, updateUserDto, {
       new: true,
-      fields: ['-password'],
+      fields: ['-accounts'],
     });
   }
 }
