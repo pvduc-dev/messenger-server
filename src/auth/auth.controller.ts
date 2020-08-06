@@ -9,7 +9,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOAuth2, ApiTags } from '@nestjs/swagger';
+import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { IResponse } from '../core/interfaces/response.interface';
@@ -20,6 +20,7 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
+import { Auth } from './decorators/auth.decorator';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -86,6 +87,7 @@ export class AuthController {
   }
 
   @Get('sign-out')
+  @Auth()
   public signOut(@Res() response: Response): Response {
     response.clearCookie('accessToken');
     return response.status(HttpStatus.OK).json({
@@ -96,7 +98,7 @@ export class AuthController {
 
   @Post('change-password')
   @HttpCode(HttpStatus.OK)
-  @ApiBearerAuth()
+  @Auth()
   public async changePassword(
     @User() user: IUser,
     @Body() changePasswordDto: ChangePasswordDto,

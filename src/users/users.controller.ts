@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { IUser } from './interfaces/user.interface';
 import { IResponse } from '../core/interfaces/response.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,7 +19,6 @@ import { QueryUserDto } from './dto/query-user.dto';
 
 @Controller('users')
 @ApiTags('users')
-@ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

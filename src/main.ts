@@ -18,10 +18,9 @@ async function bootstrap() {
   const configService: ConfigService = app.get<ConfigService>(ConfigService);
 
   const swaggerDocumentOption = new DocumentBuilder()
-    .setTitle('Chat server')
+    .setTitle('Chat RESTful API documentation')
     .setVersion('1.0.0')
-    .addBearerAuth()
-    .addCookieAuth()
+    .addCookieAuth('accessToken')
     .addOAuth2()
     .build();
   const documentSwagger = SwaggerModule.createDocument(
