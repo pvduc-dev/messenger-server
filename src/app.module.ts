@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { ProfileModule } from './profile/profile.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConversationsModule } from './conversations/conversations.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { join } from 'path';
     AuthModule,
     UsersModule,
     ProfileModule,
+    ConversationsModule,
+    MessagesModule,
   ],
   controllers: [],
   providers: [

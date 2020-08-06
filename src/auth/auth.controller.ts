@@ -40,10 +40,11 @@ export class AuthController {
       const accessToken = this.authService.generateToken({
         sub: user.id,
       });
+      const expires = this.configService.get<number>('JWT_EXPIRES');
       response.cookie('accessToken', accessToken, {
         httpOnly: true,
         path: '/',
-        maxAge: this.configService.get('JWT_EXPIRES'),
+        maxAge: expires,
       });
       return response.status(200).json({
         statusCode: HttpStatus.OK,
@@ -65,10 +66,11 @@ export class AuthController {
     const accessToken = this.authService.generateToken({
       sub: user.id,
     });
+    const expires = this.configService.get<number>('JWT_EXPIRES');
     response.cookie('accessToken', accessToken, {
       httpOnly: true,
       path: '/',
-      maxAge: this.configService.get('JWT_EXPIRES'),
+      maxAge: expires,
     });
     response.redirect(HttpStatus.FOUND, '/');
   }
