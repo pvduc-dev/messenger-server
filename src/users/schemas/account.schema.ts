@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { IAccount } from '../interfaces/account.interface';
-import { genSalt, hash, compare } from 'bcrypt';
+import { genSalt, hash } from 'bcrypt';
 
 @Schema()
 export class Account extends Document {

@@ -15,6 +15,10 @@ export interface IUser extends Document {
 
   active: boolean;
 
+  createdAt: Date;
+
+  updatedAt: Date;
+
   isValidPassword(plainText: string): Promise<boolean>;
 
   paginate(): Promise<[]>;

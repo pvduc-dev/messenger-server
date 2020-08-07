@@ -1,4 +1,6 @@
 export interface IMessage {
-  conversationId: string;
-  type: string;
+  conversation: string;
+  sender: string;
+  content: string;
+  createdAt: Date;
 }
