@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 import { AccountSchema } from './account.schema';
 import { compare } from 'bcrypt';
 
-@Schema({ timestamps: true, versionKey: false })
+@Schema({ timestamps: true, toObject: { virtuals: true, getters: true } })
 export class User extends Document {
   @Prop({ unique: true, trim: true, lowercase: true })
   public email: string;
@@ -12,7 +12,7 @@ export class User extends Document {
   public role: string;
 
   @Prop(raw([AccountSchema]))
-  public accounts: Account[];
+  public accounts: Record<string, any>;
 
   @Prop({ required: true })
   public firstName: string;

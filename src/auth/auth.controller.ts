@@ -47,6 +47,10 @@ export class AuthController {
         path: '/',
         maxAge: expires,
       });
+      response.cookie('logged', true, {
+        path: '/',
+        maxAge: expires,
+      });
       return response.status(200).json({
         statusCode: HttpStatus.OK,
         message: 'Sign in successfully',
@@ -70,6 +74,10 @@ export class AuthController {
     const expires = this.configService.get<number>('JWT_EXPIRES');
     response.cookie('accessToken', accessToken, {
       httpOnly: true,
+      path: '/',
+      maxAge: expires,
+    });
+    response.cookie('logged', 1, {
       path: '/',
       maxAge: expires,
     });
