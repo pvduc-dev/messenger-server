@@ -30,8 +30,10 @@ export class User extends Document {
 const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.method('isValidPassword', async function (plainText: string) {
-  const index = this.accounts.findIndex((account) => account === 'internal');
-  return compare(plainText, this.accounts[index]);
+  const index = this.accounts.findIndex(
+    (account) => account.kind === 'internal',
+  );
+  return compare(plainText, this.accounts[index].password);
 });
 
 UserSchema.plugin(require('mongoose-paginate-v2'));
