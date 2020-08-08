@@ -47,7 +47,7 @@ export class ConversationsController {
   public async create(
     @Body() createConversationDto: CreateConversationDto,
   ): Promise<IResponse<any>> {
-    const conversation = this.conversationsService.create(
+    const conversation = await this.conversationsService.create(
       createConversationDto,
     );
     return {
