@@ -47,7 +47,7 @@ export class AuthController {
         path: '/',
         maxAge: expires,
       });
-      response.cookie('logged', true, {
+      response.cookie('isAuth', true, {
         path: '/',
         maxAge: expires,
       });
@@ -77,7 +77,7 @@ export class AuthController {
       path: '/',
       maxAge: expires,
     });
-    response.cookie('logged', 1, {
+    response.cookie('isAuth', 1, {
       path: '/',
       maxAge: expires,
     });
@@ -98,6 +98,7 @@ export class AuthController {
   @Auth()
   public signOut(@Res() response: Response): Response {
     response.clearCookie('accessToken');
+    response.clearCookie('isAuth');
     return response.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       message: 'Sign out successfully',

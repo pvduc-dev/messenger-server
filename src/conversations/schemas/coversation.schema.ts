@@ -1,9 +1,13 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Conversation extends Document {
   @Prop()
   participants: string[];
 }
-export const ConversationSchema = SchemaFactory.createForClass(Conversation);
+const ConversationSchema = SchemaFactory.createForClass(Conversation);
+
+ConversationSchema.plugin(require('mongoose-paginate-v2'));
+
+export { ConversationSchema };
