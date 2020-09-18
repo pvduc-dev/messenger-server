@@ -12,6 +12,8 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
+  app.setGlobalPrefix('api');
+
   const configService: ConfigService = app.get<ConfigService>(ConfigService);
 
   const swaggerDocumentOption = new DocumentBuilder()
