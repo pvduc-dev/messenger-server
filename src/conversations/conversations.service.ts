@@ -11,7 +11,11 @@ export class ConversationsService {
     private readonly conversationModel: IModel<IConversation>,
   ) {}
 
-  async getByUserId(userId: string): Promise<Record<string, any>> {
+  public async findById(conversationId: string): Promise<IConversation> {
+    return this.conversationModel.findById(conversationId);
+  }
+
+  async findByUserId(userId: string): Promise<Record<string, any>> {
     return this.conversationModel.paginate({ participants: userId });
   }
 

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Message {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
@@ -21,4 +21,8 @@ export class Message {
   public content: string;
 }
 
-export const MessageSchema = SchemaFactory.createForClass(Message);
+const MessageSchema = SchemaFactory.createForClass(Message);
+
+MessageSchema.plugin(require('mongoose-paginate-v2'));
+
+export { MessageSchema };

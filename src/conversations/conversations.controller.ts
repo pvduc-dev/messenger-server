@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { IResponse } from '../core/interfaces/response.interface';
 import { MessagesService } from '../messages/messages.service';
 import { ConversationsService } from './conversations.service';
@@ -18,10 +27,10 @@ export class ConversationsController {
 
   @Get()
   @Auth()
-  public async getByUserId(
+  public async findByUserId(
     @User() user: IUser,
   ): Promise<IResponse<Record<string, any>>> {
-    const conversations = await this.conversationsService.getByUserId(user.id);
+    const conversations = await this.conversationsService.findByUserId(user.id);
     return {
       statusCode: HttpStatus.OK,
       message: 'Get conversations successfully',
@@ -30,30 +39,43 @@ export class ConversationsController {
   }
 
   @Get(':conversationId/messages')
-  public async getMessages(
-    @Param() conversationId: string,
+  @Auth()
+  public async findMessages(
+    @User() user: IUser,
+    @Param('conversationId') conversationId: string,
   ): Promise<IResponse<Record<string, any>>> {
-    const pagination = await this.messagesService.getByConversationId(
+    const conversation = await this.conversationsService.findById(
       conversationId,
     );
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Get messages successfully',
-      data: pagination,
-    };
+    if (conversation?.participants.includes(user.id)) {
+      const pagination = await this.messagesService.getByConversationId(
+        conversationId,
+      );
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Get messages successfully',
+        data: pagination,
+      };
+    }
+    if (!!conversation) {
+      throw new ForbiddenException();
+    }
+    throw new NotFoundException();
   }
 
-  @Post()
-  public async create(
-    @Body() createConversationDto: CreateConversationDto,
-  ): Promise<IResponse<any>> {
-    const conversation = await this.conversationsService.create(
-      createConversationDto,
-    );
-    return {
-      statusCode: HttpStatus.CREATED,
-      message: 'Create new conversation successfully',
-      data: conversation,
-    };
-  }
+  // @Post()
+  // @Auth()
+  // public async create(
+  //   @User() user: IUser,
+  //   @Body() createConversationDto: CreateConversationDto,
+  // ): Promise<IResponse<any>> {
+  //   const conversation = await this.conversationsService.create({
+  //     participants: [user.id, ...createConversationDto.participants],
+  //   });
+  //   return {
+  //     statusCode: HttpStatus.CREATED,
+  //     message: 'Create new conversation successfully',
+  //     data: conversation,
+  //   };
+  // }
 }
