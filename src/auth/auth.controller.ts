@@ -47,7 +47,7 @@ export class AuthController {
         path: '/',
         maxAge: expires,
       });
-      response.cookie('isAuth', true, {
+      response.cookie('isAuthenticated', true, {
         path: '/',
         maxAge: expires,
       });
