@@ -17,6 +17,7 @@ export class AuthService {
   /**
    * Validate credentials
    * @param signInDto - Sign in data transfer object
+   * @author Pv Duc
    */
   public async validate(signInDto: LoginDto): Promise<IUser> {
     const user = await this.usersService.findByEmail(signInDto.email);
