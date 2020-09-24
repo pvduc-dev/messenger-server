@@ -14,6 +14,9 @@ import { MessagesModule } from './messages/messages.module';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
+      serveStaticOptions: {
+        cacheControl: true,
+      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
