@@ -14,7 +14,8 @@ export class UsersService {
   ) {}
 
   /**
-   * Get a list of users
+   * Get a list of user
+   * @param queryUserDto - The query user data transform object
    * @author Pv Duc
    */
   public async paginate(
@@ -46,6 +47,11 @@ export class UsersService {
     return this.userModel.findOne({ email });
   }
 
+  /**
+   * Find one user by Google id
+   * @param googleId - The google id to get
+   * @author Pv Duc
+   */
   public async findByGoogleId(googleId: string): Promise<IUser> {
     return this.userModel.findOne({
       'accounts.kind': 'google',

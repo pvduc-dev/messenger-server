@@ -11,17 +11,32 @@ export class MessagesService {
     @InjectModel(Message.name) private readonly messageModel: IModel<IMessage>,
   ) {}
 
+  /**
+   * Get a list of messages by conversation id
+   * @param conversationId - The conversation id to get
+   * @author PvDuc
+   */
   public async getByConversationId(
     conversationId: string,
   ): Promise<IMessage[]> {
     return this.messageModel.paginate({ conversation: conversationId });
   }
 
+  /**
+   * Create new message
+   * @param createMessageDto
+   * @author Pv Duc
+   */
   public create(createMessageDto: CreateMessageDto): Promise<IMessage> {
     const message = new this.messageModel(createMessageDto);
     return message.save();
   }
 
+  /**
+   * Remove one message
+   * @param messageId
+   * @author PvDuc
+   */
   public async remove(messageId: string): Promise<IMessage> {
     return this.messageModel.findByIdAndDelete(messageId);
   }
