@@ -6,13 +6,13 @@ import {
   NotFoundException,
   Param,
 } from '@nestjs/common';
-import { IResponse } from '../core/interfaces/response.interface';
-import { MessagesService } from '../messages/messages.service';
-import { ConversationsService } from './conversations.service';
-import { User } from '../core/user.decorator';
-import { IUser } from '../users/interfaces/user.interface';
+import { IResponse } from '@/core/interfaces/response.interface';
+import { MessagesService } from '@/messages/messages.service';
+import { ConversationsService } from '@/conversations/conversations.service';
+import { User } from '@/core/user.decorator';
+import { IUser } from '@/users/interfaces/user.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth } from '../auth/decorators/auth.decorator';
+import { Auth } from '@/auth/decorators/auth.decorator';
 
 @Controller('conversations')
 @ApiTags('conversations')

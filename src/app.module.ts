@@ -1,14 +1,17 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from '@/users/users.module';
 import { APP_PIPE } from '@nestjs/core';
-import { AuthModule } from './auth/auth.module';
-import { ProfileModule } from './profile/profile.module';
+import { AuthModule } from '@/auth/auth.module';
+import { ProfileModule } from '@/profile/profile.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { ConversationsModule } from './conversations/conversations.module';
-import { MessagesModule } from './messages/messages.module';
+import { ConversationsModule } from '@/conversations/conversations.module';
+import { MessagesModule } from '@/messages/messages.module';
+import { SharedModule } from './shared/shared.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -16,6 +19,7 @@ import { MessagesModule } from './messages/messages.module';
       rootPath: join(__dirname, '..', 'client'),
       serveStaticOptions: {
         cacheControl: true,
+        etag: true,
       },
     }),
     ConfigModule.forRoot({
@@ -39,6 +43,8 @@ import { MessagesModule } from './messages/messages.module';
     ProfileModule,
     ConversationsModule,
     MessagesModule,
+    SharedModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [

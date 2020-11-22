@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { MessagesModule } from '../messages/messages.module';
-import { ConversationsController } from './conversations.controller';
-import { ConversationsService } from './conversations.service';
+import { MessagesModule } from '@/messages/messages.module';
+import { ConversationsController } from '@/conversations/conversations.controller';
+import { ConversationsService } from '@/conversations/conversations.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Conversation, ConversationSchema } from './schemas/coversation.schema';
-import { ConversationsGateway } from './conversations.gateway';
+import {
+  Conversation,
+  ConversationSchema,
+} from '@/conversations/schemas/coversation.schema';
 
 @Module({
   imports: [
@@ -14,6 +16,6 @@ import { ConversationsGateway } from './conversations.gateway';
     MessagesModule,
   ],
   controllers: [ConversationsController],
-  providers: [ConversationsService, ConversationsGateway],
+  providers: [ConversationsService],
 })
 export class ConversationsModule {}

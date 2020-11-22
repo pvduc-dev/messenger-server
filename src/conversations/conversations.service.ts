@@ -1,9 +1,9 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Conversation } from './schemas/coversation.schema';
-import { IModel } from '../core/interfaces/model.interface';
-import { IConversation } from './interfaces/conversation.interface';
-import { IUser } from '../users/interfaces/user.interface';
-import { CreateConversationDto } from './dto/create-conversation.dto';
+import { Conversation } from '@/conversations/schemas/coversation.schema';
+import { IModel } from '@/core/interfaces/model.interface';
+import { IConversation } from '@/conversations/interfaces/conversation.interface';
+import { IUser } from '@/users/interfaces/user.interface';
+import { CreateConversationDto } from '@/conversations/dto/create-conversation.dto';
 
 export class ConversationsService {
   constructor(

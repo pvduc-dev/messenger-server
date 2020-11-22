@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { LoginDto } from './dto/login.dto';
-import { IUser } from '../users/interfaces/user.interface';
+import { UsersService } from '@/users/users.service';
+import { LoginDto } from '@/auth/dto/login.dto';
+import { IUser } from '@/users/interfaces/user.interface';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtPayload } from './interfaces/jwt-payload.interface';
-import { SignUpDto } from './dto/sign-up.dto';
+import { IJwtPayload } from '@/auth/interfaces/jwt-payload.interface';
+import { SignUpDto } from '@/auth/dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {

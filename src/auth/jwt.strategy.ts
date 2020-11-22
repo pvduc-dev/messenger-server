@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifiedCallback } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from '../users/users.service';
-import { IJwtPayload } from './interfaces/jwt-payload.interface';
+import { UsersService } from '@/users/users.service';
+import { IJwtPayload } from '@/auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

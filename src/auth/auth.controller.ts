@@ -10,17 +10,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { IResponse } from '../core/interfaces/response.interface';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { IUser } from '../users/interfaces/user.interface';
-import { User } from '../core/user.decorator';
-import { SignUpDto } from './dto/sign-up.dto';
+import { AuthService } from '@/auth/auth.service';
+import { LoginDto } from '@/auth/dto/login.dto';
+import { IResponse } from '@/core/interfaces/response.interface';
+import { ChangePasswordDto } from '@/auth/dto/change-password.dto';
+import { IUser } from '@/users/interfaces/user.interface';
+import { User } from '@/core/user.decorator';
+import { SignUpDto } from '@/auth/dto/sign-up.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
-import { Auth } from './decorators/auth.decorator';
+import { Auth } from '@/auth/decorators/auth.decorator';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -94,11 +94,11 @@ export class AuthController {
     };
   }
 
-  @Get('sign-out')
+  @Post('sign-out')
   @Auth()
   public signOut(@Res() response: Response): Response {
     response.clearCookie('accessToken');
-    response.clearCookie('isAuth');
+    response.clearCookie('isAuthenticated');
     return response.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       message: 'Sign out successfully',
