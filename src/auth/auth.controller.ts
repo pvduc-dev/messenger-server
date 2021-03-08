@@ -65,7 +65,6 @@ export class AuthController {
   }
 
   @Get('google')
-  @ApiOAuth2([])
   @UseGuards(AuthGuard('google'))
   public google(@User() user: IUser, @Res() response: Response): any {
     const accessToken = this.authService.generateToken({
