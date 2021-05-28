@@ -1,4 +1,5 @@
 import {
+  Request,
   Body,
   Controller,
   Get,
@@ -23,10 +24,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Auth(['moderator', 'administrator'])
   public async paginate(
     @Query() queryUserDto: QueryUserDto,
+    @Request() request: any,
   ): Promise<IResponse<any>> {
+    console.log(request.clientIp);
+    console.log(request.useragent);
     const pagination = await this.usersService.paginate(queryUserDto);
     return {
       statusCode: HttpStatus.OK,

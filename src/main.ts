@@ -4,6 +4,8 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import * as userAgent from 'express-useragent';
+import * as requestIp from 'request-ip';
 
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create<NestApplication>(
@@ -11,6 +13,8 @@ async function bootstrap() {
   );
 
   app.use(cookieParser());
+  app.use(userAgent.express());
+  app.use(requestIp.mw());
 
   app.setGlobalPrefix('api');
 

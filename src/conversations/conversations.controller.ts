@@ -1,10 +1,12 @@
 import {
+  Body,
   Controller,
   ForbiddenException,
   Get,
   HttpStatus,
   NotFoundException,
   Param,
+  Post,
 } from '@nestjs/common';
 import { IResponse } from '@/core/interfaces/response.interface';
 import { MessagesService } from '@/messages/messages.service';
@@ -13,6 +15,7 @@ import { User } from '@/core/user.decorator';
 import { IUser } from '@/users/interfaces/user.interface';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth } from '@/auth/decorators/auth.decorator';
+import { CreateConversationDto } from '@/conversations/dto/create-conversation.dto';
 
 @Controller('conversations')
 @ApiTags('conversations')
@@ -60,19 +63,19 @@ export class ConversationsController {
     throw new NotFoundException();
   }
 
-  // @Post()
-  // @Auth()
-  // public async create(
-  //   @User() user: IUser,
-  //   @Body() createConversationDto: CreateConversationDto,
-  // ): Promise<IResponse<any>> {
-  //   const conversation = await this.conversationsService.create({
-  //     participants: [user.id, ...createConversationDto.participants],
-  //   });
-  //   return {
-  //     statusCode: HttpStatus.CREATED,
-  //     message: 'Create new conversation successfully',
-  //     data: conversation,
-  //   };
-  // }
+  @Post()
+  @Auth()
+  public async create(
+    @User() user: IUser,
+    @Body() createConversationDto: CreateConversationDto,
+  ): Promise<IResponse<any>> {
+    const conversation = await this.conversationsService.create({
+      participants: [user.id, ...createConversationDto.participants],
+    });
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Create new conversation successfully',
+      data: conversation,
+    };
+  }
 }
